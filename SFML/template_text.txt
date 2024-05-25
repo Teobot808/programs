@@ -1,0 +1,9 @@
+%batt=12.2%RPM=2000%COMtype=1
+
+represent strings with intigers like this:
+COM type
+1 = WiFi
+2 = NRF
+
+to avoid random lenghts
+I know it is a lazy approach but it will work :)
