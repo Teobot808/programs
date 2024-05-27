@@ -1,237 +1,157 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string> // for string and to_string()
-#include<unistd.h>               // for linux 
-#include <vector>
-#include "parameters.hpp"
+// C library headers
+#include <stdio.h>
+#include <string.h>
 
-int i;
-sf::Font font;
-
-
-/*
-void setAtributes(int x, int y, std::string string, sf::Font font ){
- text.setPosition(x, y);
- text.setString(string);
-text.setFont(font); // font is a sf::Font
-text.setCharacterSize(24); // in pixels, not points!
-text.setFillColor(sf::Color::Red);
-text.setStyle(sf::Text::Bold);
-}
-*/
+// Linux headers
+#include <fcntl.h> // Contains file controls like O_RDWR
+#include <errno.h> // Error integer and strerror() function
+#include <termios.h> // Contains POSIX terminal control definitions
+#include <unistd.h> // write(), read(), close()
+#include <bits/stdc++.h>
+#include <iostream> 
+#include <sstream> 
+#include <vector> 
+#include <unordered_map> 
+#include <map> 
 
 
 
-
-
-
-
-
-void update(sf::RenderWindow& window, sf::Text text0, sf::Text text1, sf::Text text2, sf::Text text3, sf::Text text4, sf::Text text5, sf::Text text6, sf::Text text7){
-/*
-if(i < 40){
- 
-        window.clear(sf::Color(48, 168, 172, 1));
-        //window.draw(shape);
- 
- i++;
-text.setPosition((10 + (10* i)),(( 50 + 10*i)));
-text.setString(std::to_string(i));
-text1.setPosition(temperature_pos[0], temperature_pos[1]);
-text1.setString(temperature);
-window.draw(text);
-window.draw(text1);
-sleep(1);
- 
-}
- 
-else {
-i = 0;
-}
-*/
-/*
-for(int j = 0; j < count; j++){
-window.clear(sf::Color(48, 168, 172, 1));
-//text[j].setAtributes(pos[j][0], pos[j][1], "penis", font);
-text[j].setPosition(pos[j][0], pos[j][1]);
- text[j].setString("penis");
-text[j].setFont(font); // font is a sf::Font
-text[j].setCharacterSize(24); // in pixels, not points!
-text[j].setFillColor(sf::Color::Red);
-text[j].setStyle(sf::Text::Bold);
-
-
-window.draw(text[j]);
-sleep(1);
-
-
-
-
-}
-
-*/
-
-
-window.clear(sf::Color(48, 168, 172, 1));
-window.draw(text0);
-window.draw(text1);
-window.draw(text2);
-window.draw(text3);
-window.draw(text4);
-window.draw(text5);
-window.draw(text6);
-window.draw(text7);
-
-window.display();
-
-
-}
-
-
-
-
-
-int main()
+std::string convertToString(char* a, int size)
 {
-    sf::RenderWindow window(sf::VideoMode(window_size[0], window_size[1]), "Datalogger UI");
-  // sf::Text text;
-  sf::Text text0;
-sf::Text text1;
-sf::Text text2;
-sf::Text text3;
-sf::Text text4;
-sf::Text text5;
-sf::Text text6;
-sf::Text text7;
-
-//std::vector<sf::Text>
-
-
-
-
-//sf::Font font;
-if (!font.loadFromFile("arial.ttf"))
-{
-    // error...
+    int i;
+    std::string s = "";
+    for (i = 0; i < size; i++) {
+        s = s + a[i];
+    }
+    return s;
 }
 
 
+int main() {
 
 
-/*
-// select the font
-text.setFont(font); // font is a sf::Font
 
-// set the string to display
-text.setString("Hello world");
+    //ACTIVE DATA POSITIONS (index in vector "data") !!!!
+////////////////////////
+int posVolt = 0;                   
+int posTemp = 1;
+int posAMP = 2;
+int posRPM = 3;
+////////////////////////
 
-// set the character size
-text.setCharacterSize(24); // in pixels, not points!
+std::unordered_map<int, std::string> valueMap = { { posVolt, "Volt"}, { posTemp, "Temp" },{ posAMP, "Amp" },{ posRPM, "RPM" }  };  
+std::unordered_map<int, std::string> unitMap = { { posVolt, "V"}, { posTemp, "°C" },{ posAMP, "A" },{ posRPM, "RPM" }  };  
 
-// set the color
-text.setFillColor(sf::Color::Red);
-
-// set the text style
-text.setStyle(sf::Text::Bold | sf::Text::Underlined);
- i = 0;
-   
-*/
-
-text0.setFont(font);
-text0.setCharacterSize(24);
-text0.setFillColor(sf::Color::Red);
-text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text0.setString("gec");
-text0.setPosition(batt_stat_pos[0],batt_stat_pos[1]);
-
-text1.setFont(font);
-text1.setCharacterSize(24);
-text1.setFillColor(sf::Color::Red);
-text1.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text1.setString("gec");
-text1.setPosition(avg_vel_pos[0],avg_vel_pos[1]);
-/*
-text2.setFont(font);
-text2.setCharacterSize(24);
-text2.setFillColor(sf::Color::Red);
-text2.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text2.setString("gec");
-text2.setPosition(velocity_pos[0], velocity_pos[1]);
-*/
-text2.setFont(font);
-text2.setCharacterSize(24);
-text2.setFillColor(sf::Color::Red);
-text2.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text2.setString("gec");
-text2.setPosition(exrunremain_pos[0], exrunremain_pos[1]);
-
-text3.setFont(font);
-text3.setCharacterSize(24);
-text3.setFillColor(sf::Color::Red);
-text3.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text3.setString("gec");
-text3.setPosition(temperature_pos[0], temperature_pos[1]);
-
-text4.setFont(font);
-text4.setCharacterSize(24);
-text4.setFillColor(sf::Color::Red);
-text4.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text4.setString("gec");
-text4.setPosition(ampere_pos[0], ampere_pos[1]);
-
-text5.setFont(font);
-text5.setCharacterSize(24);
-text5.setFillColor(sf::Color::Red);
-text5.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text5.setString("gec");
-text5.setPosition(velocity_pos[0], velocity_pos[1]);
-
-text6.setFont(font);
-text6.setCharacterSize(24);
-text6.setFillColor(sf::Color::Red);
-text6.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text6.setString("gec");
-text6.setPosition(time_remain_pos[0], time_remain_pos[1]);
-
-text7.setFont(font);
-text7.setCharacterSize(24);
-text7.setFillColor(sf::Color::Red);
-text7.setStyle(sf::Text::Bold | sf::Text::Underlined);
-text7.setString("gec");
-text7.setPosition(com_type_pos[0], com_type_pos[1]);
-
-//DisplayedData data[count];
+char delimiter = '%';       //delimiter
 
 
- while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-/*
-if(i < 40){
 
-        window.clear();
-        //window.draw(shape);
+  // Open the serial port. Change device path as needed (currently set to an standard FTDI USB-UART cable type device)
+  int serial_port = open("/dev/ttyACM0", O_RDWR);
 
- i++;
-text.setPosition((10 + (10* i)),(( 50 + 10*i)));
-text.setString(std::to_string(i));
-window.draw(text);
-sleep(1);
+  // Create new termios struct, we call it 'tty' for convention
+  struct termios tty;
 
-}
-
-else {
-i = 0;
-}
-window.display();
-*/
-update(window, text0, text1, text2, text3, text4, text5, text6, text7);  
+  // Read in existing settings, and handle any error
+  if(tcgetattr(serial_port, &tty) != 0) {
+      printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+      return 1;
   }
 
-    return 0;
+  tty.c_cflag &= ~PARENB; // Clear parity bit, disabling parity (most common)
+  tty.c_cflag &= ~CSTOPB; // Clear stop field, only one stop bit used in communication (most common)
+  tty.c_cflag &= ~CSIZE; // Clear all bits that set the data size 
+  tty.c_cflag |= CS8; // 8 bits per byte (most common)
+  tty.c_cflag &= ~CRTSCTS; // Disable RTS/CTS hardware flow control (most common)
+  tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+
+  tty.c_lflag &= ~ICANON;
+  tty.c_lflag &= ~ECHO; // Disable echo
+  tty.c_lflag &= ~ECHOE; // Disable erasure
+  tty.c_lflag &= ~ECHONL; // Disable new-line echo
+  tty.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
+  tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
+  tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
+
+  tty.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
+  tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
+  // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
+  // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
+
+  tty.c_cc[VTIME] = 0;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+  tty.c_cc[VMIN] = 24;
+
+  // Set in/out baud rate to be 9600
+  cfsetispeed(&tty, B9600);
+  cfsetospeed(&tty, B9600);
+
+  // Save tty settings, also checking for error
+  if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
+      printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+      return 1;
+  }
+/*
+  // Write to serial port
+  unsigned char msg[] = { 'H', 'e', 'l', 'l', 'o', '\r' };
+  write(serial_port, msg, sizeof(msg));
+*/
+std::string gec = "";
+while(1==1){
+  // Allocate memory for read buffer, set size according to your needs
+  char read_buf [256];
+
+  // Normally you wouldn't do this memset() call, but since we will just receive
+  // ASCII data for this example, we'll set everything to 0 so we can
+  // call printf() easily.
+  memset(&read_buf, '\0', sizeof(read_buf));
+
+  // Read bytes. The behaviour of read() (e.g. does it block?,
+  // how long does it block for?) depends on the configuration
+  // settings above, specifically VMIN and VTIME
+  int num_bytes = read(serial_port, &read_buf, sizeof(read_buf));
+
+  // n is the number of bytes read. n may be 0 if no bytes were received, and can also be -1 to signal an error.
+  if (num_bytes < 0) {
+      printf("Error reading: %s", strerror(errno));
+      return 1;
+  }
+std::string s_a = convertToString(read_buf, num_bytes);
+  // Here we assume we received ASCII data, but you might be sending raw bytes (in that case, don't try and
+  // print it to the screen like this!)
+ 
+gec += s_a;
+//std::cout << s_a;// << std::endl;
+ //printf(" %s", read_buf);
+//gec += "penis";
+//std::cout << gec << std::endl;
+if(gec.length() >= 24){
+//gec += "penis";
+std::cout<< gec << std::endl;
+//gec = "";
+//
+std::string inputString = gec;
+
+//std::cout << s_a << std::endl;
+std::stringstream ss(inputString); 
+    std::string token; 
+    std::vector<std::string> data;    //MAIN DATA
+while (getline(ss, token, delimiter)) { 
+        data.push_back(token); 
+
+    } 
+
+/*
+// Output the string after splitting 
+    std::cout << "String after splitting: " << std::endl; 
+    for(int i=0;i < data.size();i++){
+            std::cout <<" "<<valueMap[i]<<"  =  "<<data[i]<<unitMap[i]<<std::endl;
 }
+***///////////////
+
+
+
+}
+}
+  close(serial_port);
+  return 0; // success
+};
